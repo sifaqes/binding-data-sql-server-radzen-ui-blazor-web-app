@@ -1,4 +1,5 @@
-﻿using BindingData_SQL_EF.Shared.Models;
+﻿using Azure;
+using BindingData_SQL_EF.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace BindingData_SQL_EF.Shared.Services
 {
-	public class ClientServices
+	public class BookServices
 	{
 		private readonly HttpClient _httpClient;
 
-		public ClientServices(HttpClient httpClient)
+		public BookServices(HttpClient httpClient)
 		{
 			_httpClient = httpClient;
 
@@ -21,29 +22,35 @@ namespace BindingData_SQL_EF.Shared.Services
 		public async Task<List<Book>> GetBooks()
 		{
 			var result = await _httpClient.GetFromJsonAsync<List<Book>>("api/Book");
-
-			return result;
+			
+			return result ?? new List<Book>();
 		}
 
 
-		public async Task<Book> InsertBook(Book value)
+		public async Task<bool> InsertBook(Book value)
 		{
-			await _httpClient.PostAsJsonAsync<Book>($"api/Book/", value);
-
-			return value;
+			var response = await _httpClient.PostAsJsonAsync<Book>($"api/Book", value);
+			if (response.IsSuccessStatusCode)
+				return true;
+			else
+				return false;
 		}
 		public async Task<bool> RemoveBook(long bookId)
 		{
 			HttpResponseMessage response = await _httpClient.DeleteAsync($"api/Book/{bookId}");
-
-			return true;
+			if (response.IsSuccessStatusCode)
+				return true;
+			else
+				return false;
 		}
 
-		public async Task<Book> UpdateBook(long bookId, Book updatedBook)
+		public async Task<bool> UpdateBook(long bookId, Book updatedBook)
 		{
 			HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"api/Book/{bookId}", updatedBook);
-
-			return updatedBook;
+			if (response.IsSuccessStatusCode)
+				return true;
+			else
+				return false;
 
 		}
 	}

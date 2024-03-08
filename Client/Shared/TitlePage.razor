@@ -1,0 +1,45 @@
+﻿@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+<PageTitle>@Title</PageTitle>
+<div class="row">
+	<div class="col-auto d-flex align-items-end">
+		@if (Ruta == "")
+		{
+			<RadzenButton Shade="Shade.Lighter"
+						  Click=@(args => GoBack())
+						  Text=""
+						  Icon="arrow_back"
+						  ButtonStyle="ButtonStyle.Light" class="rz-mb-2" />
+		}
+		else 
+		{
+			<RadzenButton Shade="Shade.Lighter"
+						  Click=@(args => NavigationManager.NavigateTo(Ruta))
+						  Text=""
+						  Icon="arrow_back"
+						  ButtonStyle="ButtonStyle.Light" class="rz-mb-2" />
+		}
+		<RadzenText TextStyle="TextStyle.DisplayH6" Text="@Title" class="p-2"/>
+		<RadzenText TextStyle="TextStyle.DisplayH6" Text="@Name" class="p-2"/>
+	</div>
+</div>
+
+
+@code {
+
+	[Parameter]
+	public string Title { set; get; } = "";
+
+	[Parameter]
+	public string Name { set; get; } = "";
+
+	[Parameter]
+	public string Ruta { set; get; } = "";
+
+	private async Task GoBack()
+	{
+		await JSRuntime.InvokeVoidAsync("history.back");
+	}
+
+}

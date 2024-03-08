@@ -13,8 +13,10 @@ builder.Services.AddScoped(http => new HttpClient { BaseAddress = new Uri(builde
 builder.Services.AddDbContext<MatelasluxSystemDbContext>(option =>
 				option.UseSqlServer(builder.Configuration.GetConnectionString("LibraryDatabase")));
 builder.Services.AddControllers();
-builder.Services.AddScoped<ClientServices>();
+//builder.Services.AddScoped<BookServices>();
 builder.Services.AddRadzenComponents();
+
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

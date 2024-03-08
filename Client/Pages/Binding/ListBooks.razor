@@ -1,0 +1,74 @@
+﻿@page "/book"
+@inject DialogService DialogService
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@inject BookServices Booklibrary
+
+<TitlePage Title="Text" />
+<RadzenMenu>
+	<RadzenMenuItem Click="@( () => NavigationManager.NavigateTo($"{NavigationManager.Uri}/0"))"
+					Text="Nuevo"
+					Icon="add"
+					Disabled="EstaCargando" />
+	<RadzenMenuItem Click="@(args => Settings = null)"
+					Text="Borrar configuraciones guardadas"
+					Icon="cleare"
+					Disabled=EstaCargando />
+	<RadzenMenuItem Click="@(() => grid.Reload())"
+					Text="Refrescar"
+					Icon="refresh"
+					Disabled=EstaCargando />
+</RadzenMenu>
+
+<RadzenDataGrid @ref="grid"
+				@bind-Settings="@Settings"
+				Data="@books"
+				LoadData=@CargarDatos
+				TItem="Book"
+				PageSize="@pageSize"
+				IsLoading=@EstaCargando
+				LoadSettings="@LoadSettings"
+				AllowFiltering="true"
+				AllowColumnPicking="true"
+				AllowGrouping="true"
+				AllowPaging="true"
+				AllowSorting="true"
+				AllowMultiColumnSorting="true"
+				ShowMultiColumnSortingIndex="true"
+				AllowColumnResize="true"
+				AllowColumnReorder="true"
+				ColumnWidth="200px"
+				FilterPopupRenderMode="PopupRenderMode.OnDemand"
+				FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+				Count="@count"
+				PageSizeOptions="@pageSizeOptions"
+				ShowPagingSummary="true"
+				PageSizeChanged="@(args => pageSize = args)">
+	<Columns>
+		<RadzenDataGridColumn TItem="Book" Property="" Width="160px">
+
+			<Template Context="order">
+				<RadzenButton Icon="edit"
+							  Text="Ver"
+							  ButtonStyle="ButtonStyle.Light"
+							  Variant="Variant.Flat"
+							  Size="ButtonSize.Medium"
+							  Click="@(args => NavigationManager.NavigateTo($"{NavigationManager.Uri}/{order.Id}"))"
+							  @onclick:stopPropagation="true">
+				</RadzenButton>
+				<RadzenButton class="my-1 ms-1 rz-ml-3"
+							  Click="@(args => EliminarBook(order))"
+							  Icon="delete"
+							  ButtonStyle="ButtonStyle.Danger">
+				</RadzenButton>
+
+			</Template>
+		</RadzenDataGridColumn>
+		<RadzenDataGridColumn TItem="Book" Property="Id" Title="Fecha" FormatString="{0:d}" />
+		<RadzenDataGridColumn TItem="Book" Property="Name" Title="Username" />
+		<RadzenDataGridColumn TItem="Book" Property="Author" Title="Author" />
+		<RadzenDataGridColumn TItem="Book" Property="Quantity" Title="Quantity" />
+		<RadzenDataGridColumn TItem="Book" Property="Price" Title="Price" />
+		<RadzenDataGridColumn TItem="Book" Property="Available" Title="Available" />
+	</Columns>
+</RadzenDataGrid>

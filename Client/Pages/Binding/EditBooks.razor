@@ -1,0 +1,48 @@
+﻿@page "/book/{IdBook:int}"
+
+@inject DialogService DialogService
+@inject IJSRuntime JSRuntime
+@inject BookServices BookServices
+@inject NotificationService NotificationService
+@inject NavigationManager NavigationManager
+
+<TitlePage Title="Pedidos" Name="@book_model.Name" />
+<RadzenMenu>
+	<RadzenMenuItem Text="Guardar"
+					Click="@(args => Guardar(book_model))"
+					Icon="save"
+					Disabled="@EstaCargando" />
+	<RadzenMenuItem Text="Vaciar"
+					Click=@(args => VaciarProducto(book_model))
+					Icon="cleare"
+					Disabled="@EstaCargando" />
+	<RadzenMenuItem Text="Eliminar Producto"
+					Click=@(args => EliminarEmpleado(book_model.Id))
+					Icon="delete"
+					Disabled=@(EstaCargando || !btnBorrar) />
+</RadzenMenu>
+
+<RadzenCard class="rz-mb-5">
+	<RadzenRow>
+		<RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+			<RadzenLabel Text="Book" TextStyle="TextStyle.Subtitle2" />
+			<RadzenTextBox @bind-Value="book_model.Name" class="w-100" />
+		</RadzenColumn>
+		<RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+			<RadzenLabel Text="Author" TextStyle="TextStyle.Subtitle2" />
+			<RadzenTextBox @bind-Value="book_model.Author" class="w-100" />
+		</RadzenColumn>
+		<RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+			<RadzenLabel Text="Quantity" TextStyle="TextStyle.Subtitle2" />
+			<RadzenNumeric @bind-Value="book_model.Quantity" class="w-100" />
+		</RadzenColumn>
+		<RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+			<RadzenLabel Text="Price" TextStyle="TextStyle.Subtitle2" />
+			<RadzenNumeric @bind-Value="book_model.Price" class="w-100" />
+		</RadzenColumn>
+		<RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+			<RadzenLabel Text="Available" TextStyle="TextStyle.Subtitle2" />
+			<RadzenSwitch @bind-Value="@available" />
+		</RadzenColumn>
+	</RadzenRow>
+</RadzenCard>
